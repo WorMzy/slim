@@ -24,7 +24,7 @@ set(SLIM_VERSION "${SLIM_VERSION_MAJOR}.${SLIM_VERSION_MINOR}.${SLIM_VERSION_PAT
 set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Installation Directory")
 set(PKGDATADIR "${CMAKE_INSTALL_PREFIX}/share/slim")
 set(SYSCONFDIR "/etc")
-set(LIBDIR "/lib")
+set(LIBDIR "/usr/lib")
 set(MANDIR "${CMAKE_INSTALL_PREFIX}/share/man")
 
 set(SLIM_DEFINITIONS)
@@ -119,6 +119,7 @@ if(USE_PAM)
 	if(PAM_FOUND)
 		message("\tPAM Found")
 		set(SLIM_DEFINITIONS ${SLIM_DEFINITIONS} "-DUSE_PAM")
+		target_link_libraries(libslim ${PAM_LIBRARY})
 		target_link_libraries(${PROJECT_NAME} ${PAM_LIBRARY})
 		target_link_libraries(slimlock ${PAM_LIBRARY})
 		include_directories(${PAM_INCLUDE_DIR})
@@ -178,7 +179,9 @@ include_directories(
 )
 
 target_link_libraries(libslim
-    ${JPEG_LIBRARIES}
+	${X11_Xft_LIB}
+	${X11_Xrandr_LIB}
+ 	${JPEG_LIBRARIES}
 	${PNG_LIBRARIES}
 )
 
